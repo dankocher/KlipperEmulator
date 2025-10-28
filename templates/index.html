@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Klipper Time Web</title>
+  <link rel="stylesheet" href="/static/styles.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>⏱️ Klipper Time Web</h1>
+
+    <section class="card">
+      <h2>1) Subir G-code</h2>
+      <form id="uploadForm">
+        <input type="file" name="file" accept=".gcode" required />
+        <button>Subir</button>
+      </form>
+      <p class="hint">Coloca tu <code>printer.cfg</code> en la raíz del proyecto. Estado: <b id="cfgState">{{ 'OK' if has_cfg else 'Falta printer.cfg' }}</b></p>
+    </section>
+
+    <section class="card">
+      <h2>2) Archivos recientes</h2>
+      <div id="files"></div>
+    </section>
+
+    <section class="card">
+      <h2>3) Parámetros de simulación</h2>
+      <form id="estimateForm">
+        <input type="hidden" name="file_id" id="file_id" required />
+
+<div class="grid">
+  <label>Speed %
+    <div class="slider-wrap">
+      <input type="range" min="1" max="500" step="1" value="100" name="speed_percent" id="speed_percent_slider">
+      <input type="number" min="1" max="500" step="1" value="100" name="speed_percent_num" id="speed_percent_num">
+    </div>
+  </label>
+
+  <label>Flow %
+    <div class="slider-wrap">
+      <input type="range" min="1" max="300" step="1" value="150" name="flow_percent" id="flow_percent_slider">
+      <input type="number" min="1" max="300" step="1" value="150" name="flow_percent_num" id="flow_percent_num">
+    </div>
+  </label>
+
+  <label>Pressure Advance (s)
+    <div class="slider-wrap">
+      <input type="range" min="0" max="0.2" step="0.001" value="0" name="pressure_advance" id="pressure_advance_slider">
+      <input type="number" min="0" max="0.2" step="0.001" value="0" name="pressure_advance_num" id="pressure_advance_num">
+    </div>
+  </label>
+
+  <label>Smooth Time (s)
+    <div class="slider-wrap">
+      <input type="range" min="0" max="0.1" step="0.001" value="0.04" name="smooth_time" id="smooth_time_slider">
+      <input type="number" min="0" max="0.1" step="0.001" value="0.04" name="smooth_time_num" id="smooth_time_num">
+    </div>
+  </label>
+
+  <label>Velocity (mm/s)
+    <div class="slider-wrap">
+      <input type="range" min="10" max="500" step="1" value="300" name="max_velocity" id="max_velocity_slider">
+      <input type="number" min="10" max="500" step="1" value="300" name="max_velocity_num" id="max_velocity_num">
+    </div>
+  </label>
+
+  <label>Square Corner (mm/s)
+    <div class="slider-wrap">
+      <input type="range" min="0" max="20" step="0.1" value="5" name="square_corner_velocity" id="square_corner_velocity_slider">
+      <input type="number" min="0" max="20" step="0.1" value="5" name="square_corner_velocity_num" id="square_corner_velocity_num">
+    </div>
+  </label>
+
+  <label>Acceleration (mm/s²)
+    <div class="slider-wrap">
+      <input type="range" min="100" max="20000" step="50" value="5000" name="max_accel" id="max_accel_slider">
+      <input type="number" min="100" max="20000" step="50" value="5000" name="max_accel_num" id="max_accel_num">
+    </div>
+  </label>
+
+  <label>Accel→Decel (mm/s²)
+    <div class="slider-wrap">
+      <input type="range" min="100" max="20000" step="50" value="2500" name="accel_to_decel" id="accel_to_decel_slider">
+      <input type="number" min="100" max="20000" step="50" value="2500" name="accel_to_decel_num" id="accel_to_decel_num">
+    </div>
+  </label>
+</div>
+
+
+        <button>Calcular</button>
+      </form>
+
+      <div id="result" class="result"></div>
+    </section>
+  </div>
+
+  <template id="fileRow">
+    <div class="file-row">
+      <img class="thumb" />
+      <div class="meta">
+        <div class="name"></div>
+        <div class="actions">
+          <button class="use">Usar para estimar</button>
+          <button class="del danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
